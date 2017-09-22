@@ -1,0 +1,23 @@
+{
+  "name": "AloPeyk/AloPeyk-Api-PHP",
+  "description": "PHP Handler AloPeyk Api",
+  "keywords": [
+    "AloPeyk", "Business"
+  ],
+  "authors": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "AloPeyk\\": "src/"
+    }
+  }
+}

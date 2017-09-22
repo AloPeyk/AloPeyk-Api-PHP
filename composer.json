@@ -1,13 +1,13 @@
 {
-  "name": "AloPeyk/AloPeyk-Api-PHP",
-  "description": "PHP Handler AloPeyk Api",
+  "name": "alopeyk/alopeyk-api-php",
+  "description": "AloPeyk Api PHP Handler",
   "keywords": [
-    "AloPeyk", "Business"
+    "AloPeyk", "Business", "Api", "AloPeyk Api", "AloPeyk Business Api", "AloPeyk PHP", "PHP", "الوپیک", "الوپيك"
   ],
   "authors": [
     {
-      "name": "",
-      "email": ""
+      "name": "AloPeyk LTD",
+      "email": "admin@alopeyk.com"
     }
   ],
   "license": "MIT",

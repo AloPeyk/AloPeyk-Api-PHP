@@ -19,5 +19,6 @@
     "psr-4": {
       "AloPeyk\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "dev"
 }

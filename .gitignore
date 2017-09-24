@@ -1,9 +1,9 @@
 /vendor
+.idea/
 .idea/vcs.xml
 .idea/AloPeyk-Api-PHP.iml
 .idea/modules.xml
 .idea/workspace.xml
-.idea/
 .DS_Store
 composer.phar
 composer.lock

@@ -22,7 +22,6 @@ class AloPeykApiHandler
         if (method_exists($this, $name)) {
             return self::$name($arguments);
         }
-
         throw new \Exception('AloPeyk API: This Function Does Not Exist!');
     }
 

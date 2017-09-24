@@ -42,6 +42,7 @@ if ($apiResponse && $apiResponse->status == "success") {
 }
 ```
 
+
 #### 2. Get Address
 
 This endpoint retrieves place information by its latitude and longitude.
@@ -63,6 +64,7 @@ if($apiResponse && $apiResponse->status == "success"){
     echo $apiResponse->object->district;
 }
 ```
+
 
 #### 3. Location Suggestions
 
@@ -96,6 +98,7 @@ if ($apiResponse && $apiResponse->status == "success") {
     echo "</ol>";
 }
 ```
+
 
 #### 4. Get Price
 
@@ -147,6 +150,7 @@ try {
 
 var_dump($apiResponse);
 ```
+
 
 #### 5. Create Order
 
@@ -207,6 +211,7 @@ try {
 var_dump($apiResponse);
 ```
 
+
 #### 6. Get Order Detail
 
 In order to get the order details, call this method.
@@ -232,6 +237,7 @@ try {
 var_dump($apiResponse);
 ```
 
+
 #### 7. Cancel Order
 
 You can cancel any order before courier arrival (before the accepted status)
@@ -256,6 +262,7 @@ try {
 
 var_dump($apiResponse);
 ```
+
 
 
 

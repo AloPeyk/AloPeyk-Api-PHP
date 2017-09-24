@@ -9,6 +9,8 @@ use AloPeyk\Validator\AloPeykValidator;
 class AloPeykApiHandler
 {
 
+    private static $localToken;
+
     /**
      * @param $name
      * @param $arguments
@@ -29,9 +31,22 @@ class AloPeykApiHandler
      * @param string $method
      * @param null $postFields
      * @return array
+     * @throws AloPeykApiException
      */
     private static function getCurlOptions($endPoint = '', $method = 'GET', $postFields = null)
     {
+        /*
+         * Throw Exception If User Machine DOES NOT ABLE To Use 'openssl'
+         */
+        if (!extension_loaded('openssl')) {
+            throw new AloPeykApiException('AloPeyk API Needs The Open SSL PHP Extension! please enable it on your server.');
+        }
+
+        /*
+         * Get ACCESS-TOKEN
+         */
+        $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
+
         $curlOptions = [
             CURLOPT_URL => Configs::API_URL . $endPoint,
             CURLOPT_RETURNTRANSFER => true,
@@ -41,7 +56,7 @@ class AloPeykApiHandler
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_FAILONERROR => true,
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . Configs::TOKEN,
+                'Authorization: Bearer ' . $accessToken,
                 'Content-Type: application/json; charset=utf-8',
                 'X-Requested-With: XMLHttpRequest'
             ],
@@ -76,6 +91,13 @@ class AloPeykApiHandler
         }
     }
 
+    /**
+     * @param $localToken
+     */
+    public static function setToken($localToken)
+    {
+        self::$localToken = $localToken;
+    }
 
     /** ----------------------------------------------------------------------------------------------------------------
      * public functions

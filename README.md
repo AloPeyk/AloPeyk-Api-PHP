@@ -113,30 +113,14 @@ $apiResponse = null;
 try {
     // create origin: Behjat Abad
     $origin = new Address('origin', 'tehran', '35.723711', '51.410547');
-    $origin->setAddress("... Behjat Abad, Tehran");
-    $origin->setDescription("Behjat Abad");
-    $origin->setUnit("44");
-    $origin->setNumber("1");
-    $origin->setPersonFullname("Leonardo DiCaprio");
-    $origin->setPersonPhone("09370000000");
 
     // create first destination: N Sohrevardi Ave
     $firstDest = new Address('destination', 'tehran', '35.728457', '51.436969');
-    $firstDest->setAddress("... N Sohrevardi Ave, Tehran");
-    $firstDest->setDescription("N Sohrevardi Ave");
-    $firstDest->setUnit("55");
-    $firstDest->setNumber("2");
-    $firstDest->setPersonFullname("Eddie Redmayne");
-    $firstDest->setPersonPhone("09380000000");
 
     // create second destination: Ahmad Qasir Bokharest St
     $secondDest = new Address('destination', 'tehran', '35.729379', '51.418151');
-    $secondDest->setAddress("... Ahmad Qasir Bokharest St, Tehran");
-    $secondDest->setDescription("Ahmad Qasir Bokharest St");
-    $secondDest->setUnit("66");
-    $secondDest->setNumber("3");
-    $secondDest->setPersonFullname("Matt Damon");
-    $secondDest->setPersonPhone("09390000000");
+
+    // create new order
     $order = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
     $order->setHasReturn(true);
 

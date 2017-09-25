@@ -1,8 +1,8 @@
 # AloPeyk/AloPeyk-Api-PHP
 
-[![License](https://poser.pugx.org/alopeyk/alopeyk-api-php/license)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
-[![Latest Stable Version](https://poser.pugx.org/alopeyk/alopeyk-api-php/v/stable)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
-[![Monthly Downloads](https://poser.pugx.org/alopeyk/alopeyk-api-php/d/monthly)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
+[![License](https://poser.pugx.org/daneshvar/daneshvar-api-php/license)](https://packagist.org/packages/daneshvar/daneshvar-api-php)
+[![Latest Stable Version](https://poser.pugx.org/daneshvar/daneshvar-api-php/v/stable)](https://packagist.org/packages/daneshvar/daneshvar-api-php)
+[![Monthly Downloads](https://poser.pugx.org/daneshvar/daneshvar-api-php/d/monthly)](https://packagist.org/packages/daneshvar/daneshvar-api-php)
 
 This package is built to facilitate application development for AloPeyk RESTful API. For more information about this api, please visit [AloPeyk Documents](https://docs.alopeyk.com/)
 

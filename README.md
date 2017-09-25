@@ -3,9 +3,6 @@
 [![License](https://poser.pugx.org/alopeyk/alopeyk-api-php/license)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
 [![Latest Stable Version](https://poser.pugx.org/alopeyk/alopeyk-api-php/v/stable)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
 [![Monthly Downloads](https://poser.pugx.org/alopeyk/alopeyk-api-php/d/monthly)](https://packagist.org/packages/alopeyk/alopeyk-api-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/markuspoerschke/iCal/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/markuspoerschke/iCal/?branch=master) 
-[![Code Coverage](https://scrutinizer-ci.com/g/markuspoerschke/iCal/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/markuspoerschke/iCal/?branch=master) 
-[![Build Status](https://travis-ci.org/markuspoerschke/iCal.svg?branch=master)](https://travis-ci.org/markuspoerschke/iCal)
 
 This package is built to facilitate application development for AloPeyk RESTful API. For more information about this api, please visit [AloPeyk Documents](https://docs.alopeyk.com/)
 

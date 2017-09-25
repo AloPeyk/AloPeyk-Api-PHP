@@ -45,6 +45,14 @@ class AloPeykApiHandler
          * Get ACCESS-TOKEN
          */
         $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
+        if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
+            throw new AloPeykApiException('Invalid ACCESS-TOKEN! 
+            All AloPeyk API endpoints support the JWT authentication protocol. 
+            To start sending authenticated HTTP requests you will need to use your JWT authorization token which is sent to you.
+            Put it in: vendor/alopeyk/alopeyk-api-php/src/Config/Configs.php : TOKEN const 
+            ');
+        }
+
 
         $curlOptions = [
             CURLOPT_URL => Configs::API_URL . $endPoint,

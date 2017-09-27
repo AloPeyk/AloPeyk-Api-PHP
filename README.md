@@ -22,23 +22,16 @@ Link to Packagist: https://packagist.org/packages/alopeyk/alopeyk-api-php
 
 ```PHP
 use AloPeyk\AloPeykApiHandler;
-use AloPeyk\Exception\AloPeykApiException;
 
-$apiResponse = null;
-try {
-    $apiResponse = AloPeykApiHandler::authenticate();
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
+$apiResponse = AloPeykApiHandler::authenticate();
 if ($apiResponse && $apiResponse->status == "success") {
     $user = $apiResponse->object->user;
     echo $user->firstname . " " . $user->lastname;
 }
+```
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+##### Sample Api Response
+```JSON
 {
   "status": "success",
   "object": {
@@ -75,23 +68,16 @@ if ($apiResponse && $apiResponse->status == "success") {
 This endpoint retrieves place information by its latitude and longitude.
 
 ```PHP
-use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Model\Location;
 
-$apiResponse = null;
-try {
-    $apiResponse = Location::getAddress("35.732595", "51.413379");
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
+$apiResponse = Location::getAddress("35.732595", "51.413379");
 if ($apiResponse && $apiResponse->status == "success") {
     echo $apiResponse->object->district;
 }
+```
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+##### Sample Api Response
+```JSON
 {
   "status": "success",
   "message": "findPlace",
@@ -116,21 +102,12 @@ This endpoint retrieves suggestions by search input.
 The result will be an array of suggestions. Each one includes the region and the name of the retrieved place, and offers coordinates for that item.
 
 ```PHP
-use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Model\Location;
 
-$apiResponse = null;
-try {
-    // $locationName = null;   // returns AloPeyk Exception
-    // $locationName = '';     // returns AloPeyk Exception
-    $locationName = "أرژ";
-    $apiResponse = Location::getSuggestions($locationName);
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
+// $locationName = null;   // returns AloPeyk Exception
+// $locationName = '';     // returns AloPeyk Exception
+$locationName = "أرژ";
+$apiResponse = Location::getSuggestions($locationName);
 if ($apiResponse && $apiResponse->status == "success") {
     $locations = $apiResponse->object;
     echo "<ol>";
@@ -141,8 +118,11 @@ if ($apiResponse && $apiResponse->status == "success") {
     }
     echo "</ol>";
 }
+```
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+##### Sample Api Response
+```JSON
+
 {
   "status": "success",
   "message": "autoComplete",
@@ -189,41 +169,31 @@ if ($apiResponse && $apiResponse->status == "success") {
 Request a quote for an order with origin address and destination address.
 
 ```PHP
-use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Model\Address;
 use AloPeyk\Model\Order;
 
-$apiResponse = null;
-try {
-    /*
-     * Create Origin Address
-     */
-    $origin = new Address('origin', 'tehran', '35.723711', '51.410547');
+/*
+ * Create Origin Address
+ */
+$origin = new Address('origin', 'tehran', '35.723711', '51.410547');
 
-    /*
-     * Create First Destination
-     */
-    $firstDest = new Address('destination', 'tehran', '35.728457', '51.436969');
+/*
+ * Create First Destination
+ */
+$firstDest = new Address('destination', 'tehran', '35.728457', '51.436969');
 
-    /*
-     * Create Second Destination
-     */
-    $secondDest = new Address('destination', 'tehran', '35.729379', '51.418151');
+/*
+ * Create Second Destination
+ */
+$secondDest = new Address('destination', 'tehran', '35.729379', '51.418151');
 
-    /*
-     * Create New Order
-     */
-    $order = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
-    $order->setHasReturn(true);
+/*
+ * Create New Order
+ */
+$order = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
+$order->setHasReturn(true);
 
-    $apiResponse = $order->getPrice();
-
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
+$apiResponse = $order->getPrice();
 
 if ($apiResponse && $apiResponse->status == "success") {
     $addresses = $apiResponse->object->addresses;
@@ -265,7 +235,10 @@ if ($apiResponse && $apiResponse->status == "success") {
           </tr>";
 }
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+```
+
+##### Sample Api Response
+```JSON
 {
   "status": "success",
   "message": null,
@@ -321,61 +294,53 @@ if ($apiResponse && $apiResponse->status == "success") {
 Once you calculated your the price of your order, you can use this endpoint in order to create a new order.
 
 ```PHP
-use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Model\Address;
 use AloPeyk\Model\Order;
 
-$apiResponse = null;
-try {
-    /*
-     * Create Origin: Behjat Abad
-     */
-    $origin = new Address('origin', 'tehran', '35.755460', '51.416874');
-    $origin->setAddress("... Behjat Abad, Tehran");
-    $origin->setDescription("Behjat Abad");                                            // optional                            
-    $origin->setUnit("44");                                                            // optional
-    $origin->setNumber("1");                                                           // optional
-    $origin->setPersonFullname("Leonardo DiCaprio");                                   // optional
-    $origin->setPersonPhone("09370000000");                                            // optional
+/*
+ * Create Origin: Behjat Abad
+ */
+$origin = new Address('origin', 'tehran', '35.755460', '51.416874');
+$origin->setAddress("... Behjat Abad, Tehran");
+$origin->setDescription("Behjat Abad");                                            // optional                            
+$origin->setUnit("44");                                                            // optional
+$origin->setNumber("1");                                                           // optional
+$origin->setPersonFullname("Leonardo DiCaprio");                                   // optional
+$origin->setPersonPhone("09370000000");                                            // optional
 
-    /*
-     * Create First Destination: N Sohrevardi Ave
-     */
-    $firstDest = new Address('destination', 'tehran', '35.758495', '51.442550');
-    $firstDest->setAddress("... N Sohrevardi Ave, Tehran");
-    $firstDest->setDescription("N Sohrevardi Ave");                                    // optional
-    $firstDest->setUnit("55");                                                         // optional
-    $firstDest->setNumber("2");                                                        // optional
-    $firstDest->setPersonFullname("Eddie Redmayne");                                   // optional
-    $firstDest->setPersonPhone("09380000000");                                         // optional
-    
+/*
+ * Create First Destination: N Sohrevardi Ave
+ */
+$firstDest = new Address('destination', 'tehran', '35.758495', '51.442550');
+$firstDest->setAddress("... N Sohrevardi Ave, Tehran");
+$firstDest->setDescription("N Sohrevardi Ave");                                    // optional
+$firstDest->setUnit("55");                                                         // optional
+$firstDest->setNumber("2");                                                        // optional
+$firstDest->setPersonFullname("Eddie Redmayne");                                   // optional
+$firstDest->setPersonPhone("09380000000");                                         // optional
 
-    /*
-     * Create Second Destination: Ahmad Qasir Bokharest St
-     */
-    $secondDest = new Address('destination', 'tehran', '35.895452', '51.589632');
-    $secondDest->setAddress("... Ahmad Qasir Bokharest St, Tehran");
-    $secondDest->setDescription("Ahmad Qasir Bokharest St");                            // optional
-    $secondDest->setUnit("66");                                                         // optional
-    $secondDest->setNumber("3");                                                        // optional
-    $secondDest->setPersonFullname("Matt Damon");                                       // optional
-    $secondDest->setPersonPhone("09390000000");                                         // optional
 
-    $order = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
-    $order->setHasReturn(true);
+/*
+ * Create Second Destination: Ahmad Qasir Bokharest St
+ */
+$secondDest = new Address('destination', 'tehran', '35.895452', '51.589632');
+$secondDest->setAddress("... Ahmad Qasir Bokharest St, Tehran");
+$secondDest->setDescription("Ahmad Qasir Bokharest St");                            // optional
+$secondDest->setUnit("66");                                                         // optional
+$secondDest->setNumber("3");                                                        // optional
+$secondDest->setPersonFullname("Matt Damon");                                       // optional
+$secondDest->setPersonPhone("09390000000");                                         // optional
 
-    $apiResponse = $order->create($order);
+$order = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
+$order->setHasReturn(true);
 
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+$apiResponse = $order->create($order);
 
 var_dump($apiResponse);
+```
 
-
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+##### Sample Api Response
+```JSON
 {
   "status": "success",
   "message": null,
@@ -517,25 +482,20 @@ In order to get the order details, call this method.
 
 ```PHP
 use AloPeyk\Model\Order;
-use AloPeyk\Exception\AloPeykApiException;
 
-$apiResponse = null;
-try {
-    // $orderID = "   309 ";
-    // $orderID = "   309<p>";
-    // $orderID = '';
-    // $orderID = null;
-    $orderID = 309;
-    $apiResponse = Order::getDetails($orderID);
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+// $orderID = "   309 ";
+// $orderID = "   309<p>";
+// $orderID = '';
+// $orderID = null;
+$orderID = 309;
+$apiResponse = Order::getDetails($orderID);
 
 var_dump($apiResponse);
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+```
+
+##### Sample Api Response
+```JSON
 "status": "success",
   "message": null,
   "object": {
@@ -730,26 +690,20 @@ var_dump($apiResponse);
 You can cancel any order before courier arrival (before the accepted status)
 
 ```PHP
-use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Model\Order;
 
-$apiResponse = null;
-try {
-    // $orderID = "   300 ";     // works fine as 300
-    // $orderID = "   300<p>";   // works fine as 300
-    // $orderID = '';            // throws AloPeykException
-    // $orderID = null;          // throws AloPeykException
-    $orderID = 300;
-    $apiResponse = Order::cancel($orderID);
-} catch (AloPeykApiException $e) {
-    echo $e->errorMessage();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+// $orderID = "   300 ";     // works fine as 300
+// $orderID = "   300<p>";   // works fine as 300
+// $orderID = '';            // throws AloPeykException
+// $orderID = null;          // throws AloPeykException
+$orderID = 300;
+$apiResponse = Order::cancel($orderID);
 
 var_dump($apiResponse);
+```
 
-// SAMPLE API RESPONSE: ------------------------------------------------------------------------------------------------
+##### Sample Api Response
+```JSON
 {
   "status": "success",
   "message": null,

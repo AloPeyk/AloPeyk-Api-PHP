@@ -37,7 +37,7 @@ if ($apiResponse && $apiResponse->status == "success") {
   "object": {
     "user": {
       "id": 99,
-      "phone": "09195071197",
+      "phone": "09701234567",
       "firstname": "john",
       "lastname": "doe",
       "type": "CUSTOMER",
@@ -653,7 +653,7 @@ var_dump($apiResponse);
     },
     "customer": {
         "id": 99,
-      "phone": "09195071197",
+      "phone": "09701234567",
       "firstname": "mohammad hassan",
       "lastname": "daneshvar",
       "email": "daneshvar.email@gmail.com",

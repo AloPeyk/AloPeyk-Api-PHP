@@ -44,8 +44,7 @@ class AloPeykApiHandler
         /*
          * Get ACCESS-TOKEN
          */
-        $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
-        if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
+        if (is_null(self::getToken())) {
             throw new AloPeykApiException('Invalid ACCESS-TOKEN! 
             All AloPeyk API endpoints support the JWT authentication protocol. 
             To start sending authenticated HTTP requests you will need to use your JWT authorization token which is sent to you.
@@ -104,6 +103,19 @@ class AloPeykApiHandler
     public static function setToken($localToken)
     {
         self::$localToken = $localToken;
+    }
+
+    /**
+     * @return null|string
+     */
+    public static function getToken()
+    {
+        $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
+        if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
+            return null;
+        }
+
+        return $accessToken;
     }
 
     /** ----------------------------------------------------------------------------------------------------------------

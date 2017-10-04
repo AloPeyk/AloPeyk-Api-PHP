@@ -8,7 +8,6 @@ use AloPeyk\Validator\AloPeykValidator;
 
 class AloPeykApiHandler
 {
-
     private static $localToken;
 
     /**
@@ -40,19 +39,17 @@ class AloPeykApiHandler
         if (!extension_loaded('openssl')) {
             throw new AloPeykApiException('AloPeyk API Needs The Open SSL PHP Extension! please enable it on your server.');
         }
-
         /*
          * Get ACCESS-TOKEN
          */
-        if (is_null(self::getToken())) {
+        $accessToken = self::getToken();
+        if (!$accessToken) {
             throw new AloPeykApiException('Invalid ACCESS-TOKEN! 
             All AloPeyk API endpoints support the JWT authentication protocol. 
             To start sending authenticated HTTP requests you will need to use your JWT authorization token which is sent to you.
             Put it in: vendor/alopeyk/alopeyk-api-php/src/Config/Configs.php : TOKEN const 
             ');
         }
-
-
         $curlOptions = [
             CURLOPT_URL => Configs::API_URL . $endPoint,
             CURLOPT_RETURNTRANSFER => true,
@@ -67,14 +64,12 @@ class AloPeykApiHandler
                 'X-Requested-With: XMLHttpRequest'
             ],
         ];
-
         if ($method == 'GET') {
             $curlOptions[CURLOPT_CUSTOMREQUEST] = 'GET';
         } else {
             $curlOptions[CURLOPT_CUSTOMREQUEST] = 'POST';
             $curlOptions[CURLOPT_POSTFIELDS] = json_encode($postFields);
         }
-
         return $curlOptions;
     }
 
@@ -87,9 +82,7 @@ class AloPeykApiHandler
     {
         $response = curl_exec($curlObject);
         $err = curl_error($curlObject);
-
         curl_close($curlObject);
-
         if ($err) {
             throw new AloPeykApiException($err);
         } else {
@@ -106,31 +99,26 @@ class AloPeykApiHandler
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public static function getToken()
     {
         $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
         if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
-            return null;
+            return false;
         }
-
         return $accessToken;
     }
-
     /** ----------------------------------------------------------------------------------------------------------------
      * public functions
      * ---------------------------------------------------------------------------------------------------------------- */
-
     /**
      * Authentication
      */
     public static function authenticate()
     {
         $curl = curl_init();
-
         curl_setopt_array($curl, self::getCurlOptions());
-
         return self::getApiResponse($curl);
     }
 
@@ -143,18 +131,13 @@ class AloPeykApiHandler
     public static function getAddress($latitude, $longitude)
     {
         $curl = curl_init();
-
-
         if (!AloPeykValidator::validateLatitude($latitude)) {
             throw new AloPeykApiException('Latitude is not correct');
         }
         if (!AloPeykValidator::validateLongitude($longitude)) {
             throw new AloPeykApiException('Longitude is not correct');
         }
-
-
         curl_setopt_array($curl, self::getCurlOptions("locations?latlng=$latitude,$longitude"));
-
         return self::getApiResponse($curl);
     }
 
@@ -166,14 +149,11 @@ class AloPeykApiHandler
     public static function getLocationSuggestion($locationName)
     {
         $curl = curl_init();
-
         $locationName = AloPeykValidator::sanitize($locationName);
         if (empty($locationName)) {
             throw new AloPeykApiException('Location Name can not be empty!');
         }
-
         curl_setopt_array($curl, self::getCurlOptions("locations?input=$locationName"));
-
         return self::getApiResponse($curl);
     }
 
@@ -184,9 +164,7 @@ class AloPeykApiHandler
     public static function getPrice($order)
     {
         $curl = curl_init();
-
         curl_setopt_array($curl, self::getCurlOptions('orders/price/calc', 'POST', $order->toArray('getPrice')));
-
         return self::getApiResponse($curl);
     }
 
@@ -197,9 +175,7 @@ class AloPeykApiHandler
     public static function createOrder($order)
     {
         $curl = curl_init();
-
         curl_setopt_array($curl, self::getCurlOptions('orders', 'POST', $order->toArray('createOrder')));
-
         return self::getApiResponse($curl);
     }
 
@@ -211,14 +187,11 @@ class AloPeykApiHandler
     public static function getOrderDetail($orderID)
     {
         $curl = curl_init();
-
         $orderID = AloPeykValidator::sanitize($orderID);
         if (!filter_var($orderID, FILTER_VALIDATE_INT)) {
             throw new AloPeykApiException('OrderID must be integer!');
         }
-
         curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}?columns=*,addresses,screenshot,progress,courier,customer,last_position_minimal,eta_minimal"));
-
         return self::getApiResponse($curl);
     }
 
@@ -230,14 +203,11 @@ class AloPeykApiHandler
     public static function cancelOrder($orderID)
     {
         $curl = curl_init();
-
         $orderID = AloPeykValidator::sanitize($orderID);
         if (!filter_var($orderID, FILTER_VALIDATE_INT)) {
             throw new AloPeykApiException('OrderID must be integer!');
         }
-
         curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/cancel"));
-
         return self::getApiResponse($curl);
     }
 }

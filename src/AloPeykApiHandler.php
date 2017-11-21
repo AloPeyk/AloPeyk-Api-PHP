@@ -211,5 +211,18 @@ class AloPeykApiHandler
         curl_setopt_array($curl, self::getCurlOptions("show-profile?columns=*,credit"));
 
         return self::getApiResponse($curl);
+    }    
+
+    /**
+     * Coupon Validation
+     * @return  mixed
+     */
+    public static function validateCoupon($code)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, self::getCurlOptions("coupons", "POST", $code));
+
+        return self::getApiResponse($curl);
     }
 }

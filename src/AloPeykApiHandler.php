@@ -199,4 +199,17 @@ class AloPeykApiHandler
 
         return self::getApiResponse($curl);
     }
+
+    /**
+     * User Profile
+     * @return  mixed
+     */
+    public static function getUserProfile()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, self::getCurlOptions("show-profile?columns=*,credit"));
+
+        return self::getApiResponse($curl);
+    }
 }

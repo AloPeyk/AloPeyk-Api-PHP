@@ -225,4 +225,24 @@ class AloPeykApiHandler
 
         return self::getApiResponse($curl);
     }
+
+    /**
+     * Payment Route List
+     * @return array
+     */
+    public static function getPaymentGateways()
+    {
+        return array_keys(Configs::PAYMENT_ROUTES);
+    }
+
+    /**
+     * Credit Top-Up
+     * @param $user_id
+     * @param $amount
+     * @return string
+     */
+    public static function getPaymentRoute($user_id, $amount, $gateway = 'saman')
+    {
+        return Configs::API_URL . Configs::PAYMENT_ROUTES[$gateway] . "?user_id={$user_id}&amount={$amount}";
+    }
 }

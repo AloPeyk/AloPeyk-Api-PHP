@@ -15,6 +15,10 @@ class Configs
     | Don't edit following values
     |
     */
+    const PAYMENT_ROUTES = [
+        'saman' => 'payments/saman/checkout',
+        'zarinpal' => 'payments/zarinpal/checkout'
+    ];
     const API_URL = 'https://sandbox-api.alopeyk.com/api/v2/';
     const ADDRESS_TYPES = [
         'origin',

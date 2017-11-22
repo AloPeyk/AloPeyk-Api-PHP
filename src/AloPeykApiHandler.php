@@ -186,7 +186,7 @@ class AloPeykApiHandler
      * @return mixed
      * @throws AloPeykApiException
      */
-    public static function cancelOrder($orderID)
+    public static function cancelOrder($orderID, $comment)
     {
         $curl = curl_init();
 
@@ -195,7 +195,7 @@ class AloPeykApiHandler
             throw new AloPeykApiException('OrderID must be integer!');
         }
 
-        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/cancel"));
+        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/cancel?comment={$comment}"));
 
         return self::getApiResponse($curl);
     }

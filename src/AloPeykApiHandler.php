@@ -8,7 +8,6 @@ use AloPeyk\Validator\AloPeykValidator;
 
 class AloPeykApiHandler
 {
-
     private static $localToken;
 
     /**
@@ -40,19 +39,17 @@ class AloPeykApiHandler
         if (!extension_loaded('openssl')) {
             throw new AloPeykApiException('AloPeyk API Needs The Open SSL PHP Extension! please enable it on your server.');
         }
-
         /*
          * Get ACCESS-TOKEN
          */
-        if (is_null(self::getToken())) {
+        $accessToken = self::getToken();
+        if (!$accessToken) {
             throw new AloPeykApiException('Invalid ACCESS-TOKEN! 
             All AloPeyk API endpoints support the JWT authentication protocol. 
             To start sending authenticated HTTP requests you will need to use your JWT authorization token which is sent to you.
             Put it in: vendor/alopeyk/alopeyk-api-php/src/Config/Configs.php : TOKEN const 
             ');
         }
-
-
         $curlOptions = [
             CURLOPT_URL => Configs::API_URL . $endPoint,
             CURLOPT_RETURNTRANSFER => true,
@@ -67,14 +64,12 @@ class AloPeykApiHandler
                 'X-Requested-With: XMLHttpRequest'
             ],
         ];
-
         if ($method == 'GET') {
             $curlOptions[CURLOPT_CUSTOMREQUEST] = 'GET';
         } else {
             $curlOptions[CURLOPT_CUSTOMREQUEST] = 'POST';
             $curlOptions[CURLOPT_POSTFIELDS] = json_encode($postFields);
         }
-
         return $curlOptions;
     }
 
@@ -87,9 +82,7 @@ class AloPeykApiHandler
     {
         $response = curl_exec($curlObject);
         $err = curl_error($curlObject);
-
         curl_close($curlObject);
-
         if ($err) {
             throw new AloPeykApiException($err);
         } else {
@@ -97,7 +90,6 @@ class AloPeykApiHandler
         }
     }
 
-    
     /**
      * @param $localToken
      */
@@ -107,18 +99,16 @@ class AloPeykApiHandler
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public static function getToken()
     {
         $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
         if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
-            return null;
+            return false;
         }
-
         return $accessToken;
     }
-
 
     /** ----------------------------------------------------------------------------------------------------------------
      * public functions
@@ -307,6 +297,6 @@ class AloPeykApiHandler
      */
     public static function getPrintInvoice($orderId, $orderToken)
     {
-        return Configs::URL . "/order/{$orderId}/print?token={$orderToken}";
+        return Configs::URL . "order/{$orderId}/print?token={$orderToken}";
     }
 }

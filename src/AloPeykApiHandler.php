@@ -245,4 +245,25 @@ class AloPeykApiHandler
     {
         return Configs::API_URL . Configs::PAYMENT_ROUTES[$gateway] . "?user_id={$user_id}&amount={$amount}";
     }
+
+    /**
+     * Retrieve tracking url for the order
+     * @param $orderToken
+     * @return string
+     */
+    public static function getTrackingUrl($orderToken)
+    {
+        return Configs::TRACKING_URL . "#/{$orderToken}";
+    }
+
+    /**
+     * Retrieve the print invoice for the order
+     * @param $orderId
+     * @param $orderToken
+     * @return string
+     */
+    public static function getPrintInvoice($orderId, $orderToken)
+    {
+        return Configs::URL . "/order/{$orderId}/print?token={$orderToken}";
+    }
 }

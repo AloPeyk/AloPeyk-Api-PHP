@@ -16,15 +16,22 @@ class Order
     private $destinationsAddress;
     private $hasReturn;
     private $cashed;
+    private $scheduled_at;
 
-    public function __construct($transportType, $originAddress, $destinationsAddress)
+    public function __construct($transportType, $originAddress, $destinationsAddress, $scheduled_at = null)
     {
         $this->setTransportType($transportType);
         $this->addOriginAddress($originAddress);
         $this->setHasReturn(false);
         $this->setCashed(false);
 
+        if($scheduled_at)
+        {
+            $this->setScheduledAt($scheduled_at);
+        }
+
         $this->destinationsAddress = [];
+        
         if (!is_array($destinationsAddress)) {
             $this->addDestinationsAddress($destinationsAddress);
         } else {
@@ -48,6 +55,15 @@ class Order
         }
 
         $this->transportType = $transportType;
+    }    
+
+    /**
+     * Set scheduled_at attribute
+     * @param $scheduledAt
+     */
+    public function setScheduledAt($scheduled_at)
+    {
+        $this->scheduled_at = $scheduled_at;
     }
 
     /**
@@ -144,6 +160,14 @@ class Order
         return $this->cashed;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getScheduledAt()
+    {
+        return $this->scheduled_at;
+    }
+
     // Utilities -------------------------------------------------------------------------------------------------------
     public function toArray($endPoint)
     {
@@ -155,6 +179,7 @@ class Order
             'addresses' => [$this->getOriginAddress()->toArray($endPoint)],
             'has_return' => $this->getHasReturn(),
             'cashed' => $this->getCashed(),
+            'scheduled_at' => $this->getScheduledAt()
         ];
 
         // add destinations

@@ -9,6 +9,8 @@ use AloPeyk\Validator\AloPeykValidator;
 class AloPeykApiHandler
 {
 
+    private static $localToken;
+
     /**
      * @param $name
      * @param $arguments
@@ -20,8 +22,7 @@ class AloPeykApiHandler
         if (method_exists($this, $name)) {
             return self::$name($arguments);
         }
-
-        throw new \Exception('AloPeyk API: This Function Does Not Exist!');
+        throw new AloPeykApiException('AloPeyk API: This Function Does Not Exist!');
     }
 
     /**
@@ -29,9 +30,29 @@ class AloPeykApiHandler
      * @param string $method
      * @param null $postFields
      * @return array
+     * @throws AloPeykApiException
      */
     private static function getCurlOptions($endPoint = '', $method = 'GET', $postFields = null)
     {
+        /*
+         * Throw Exception If User Machine DOES NOT ABLE To Use 'openssl'
+         */
+        if (!extension_loaded('openssl')) {
+            throw new AloPeykApiException('AloPeyk API Needs The Open SSL PHP Extension! please enable it on your server.');
+        }
+
+        /*
+         * Get ACCESS-TOKEN
+         */
+        if (is_null(self::getToken())) {
+            throw new AloPeykApiException('Invalid ACCESS-TOKEN! 
+            All AloPeyk API endpoints support the JWT authentication protocol. 
+            To start sending authenticated HTTP requests you will need to use your JWT authorization token which is sent to you.
+            Put it in: vendor/alopeyk/alopeyk-api-php/src/Config/Configs.php : TOKEN const 
+            ');
+        }
+
+
         $curlOptions = [
             CURLOPT_URL => Configs::API_URL . $endPoint,
             CURLOPT_RETURNTRANSFER => true,
@@ -41,7 +62,7 @@ class AloPeykApiHandler
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_FAILONERROR => true,
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . Configs::TOKEN,
+                'Authorization: Bearer ' . $accessToken,
                 'Content-Type: application/json; charset=utf-8',
                 'X-Requested-With: XMLHttpRequest'
             ],
@@ -74,6 +95,28 @@ class AloPeykApiHandler
         } else {
             return json_decode($response);
         }
+    }
+
+    
+    /**
+     * @param $localToken
+     */
+    public static function setToken($localToken)
+    {
+        self::$localToken = $localToken;
+    }
+
+    /**
+     * @return null|string
+     */
+    public static function getToken()
+    {
+        $accessToken = empty(self::$localToken) ? Configs::TOKEN : self::$localToken;
+        if (empty($accessToken) || $accessToken == "PUT-YOUR-ACCESS-TOKEN-HERE") {
+            return null;
+        }
+
+        return $accessToken;
     }
 
 

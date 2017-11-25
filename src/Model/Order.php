@@ -2,6 +2,7 @@
 
 namespace AloPeyk\Model;
 
+use AloPeyk\AloPeykApiHandler;
 use AloPeyk\Config\Configs;
 use AloPeyk\Exception\AloPeykApiException;
 use AloPeyk\Validator\AloPeykValidator;
@@ -31,7 +32,6 @@ class Order
         }
 
         $this->destinationsAddress = [];
-        
         if (!is_array($destinationsAddress)) {
             $this->addDestinationsAddress($destinationsAddress);
         } else {
@@ -55,7 +55,7 @@ class Order
         }
 
         $this->transportType = $transportType;
-    }    
+    }
 
     /**
      * Set scheduled_at attribute
@@ -147,6 +147,18 @@ class Order
     /**
      * @return mixed
      */
+    public function getDestinationsAddressArray()
+    {
+        $addresses = [];
+        foreach ($this->getDestinationsAddress() as $address) {
+            array_push($addresses, $address->toArray('destination'));
+        }
+        return $addresses;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getHasReturn()
     {
         return $this->hasReturn;
@@ -160,15 +172,53 @@ class Order
         return $this->cashed;
     }
 
+    // Actions ---------------------------------------------------------------------------------------------------------
+
     /**
      * @return mixed
      */
+    public function create()
+    {
+        return AloPeykApiHandler::createOrder($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice()
+    {
+        return AloPeykApiHandler::getPrice($this);
+    }
+
     public function getScheduledAt()
     {
         return $this->scheduled_at;
     }
 
+    /**
+     * @param $orderID
+     * @return mixed
+     */
+    public static function cancel($orderID)
+    {
+        return AloPeykApiHandler::cancelOrder($orderID);
+    }
+
+    /**
+     * @param $orderID
+     * @return mixed
+     */
+    public static function getDetails($orderID)
+    {
+        return AloPeykApiHandler::getOrderDetail($orderID);
+    }
+
     // Utilities -------------------------------------------------------------------------------------------------------
+
+    /**
+     * @param $endPoint
+     * @return array
+     */
     public function toArray($endPoint)
     {
         $this->isValid();
@@ -176,16 +226,15 @@ class Order
         $orderArray = [
             'city' => $this->city,
             'transport_type' => $this->getTransportType(),
-            'addresses' => [$this->getOriginAddress()->toArray($endPoint)],
             'has_return' => $this->getHasReturn(),
             'cashed' => $this->getCashed(),
             'scheduled_at' => $this->getScheduledAt()
         ];
 
-        // add destinations
-        foreach ($this->getDestinationsAddress() as $address) {
-            array_push($orderArray['addresses'], $address->toArray($endPoint));
-        }
+        $orderArray['addresses'] = array_merge(
+            [$this->getOriginAddress()->toArray($endPoint)],
+            $this->getDestinationsAddressArray()
+        );
 
         return $orderArray;
     }

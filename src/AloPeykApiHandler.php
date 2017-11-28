@@ -299,4 +299,17 @@ class AloPeykApiHandler
     {
         return Configs::URL . "order/{$orderId}/print?token={$orderToken}";
     }
+
+    /**
+     * Retrieve the application configuration array
+     * @return mixed
+     */
+    public static function getAppConfig()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, self::getCurlOptions("config"));
+
+        return self::getApiResponse($curl);
+    }
 }

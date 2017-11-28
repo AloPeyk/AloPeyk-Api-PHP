@@ -1,11 +1,18 @@
 <?php
 
 namespace AloPeyk\Config;
+use AloPeyk\AloPeykApiHandler;
 
 class Configs
 {
     const TOKEN = "PUT-YOUR-ACCESS-TOKEN-HERE";
 
+    private $appConfig;
+
+    public function __construct()
+    {
+        $this->setConfig();
+    }
 
     /*
     |-------------------------------------------------------------------------------------------------------------------
@@ -37,5 +44,20 @@ class Configs
         'rey',
     ];
 
+    /**
+     * Set appConfig attribute
+     */
+    private function setConfig()
+    {
+        $this->appConfig = AloPeykApiHandler::getAppConfig();
+    }
+
+    /**
+     * Get appConfig attribute
+     */
+    public function getConfig()
+    {
+        return $this->appConfig;
+    }
 }
 

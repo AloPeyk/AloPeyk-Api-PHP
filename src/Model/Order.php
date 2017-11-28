@@ -117,7 +117,6 @@ class Order
         $this->cashed = $cashed;
     }
 
-
     // Getters ---------------------------------------------------------------------------------------------------------
 
     /**
@@ -199,9 +198,9 @@ class Order
      * @param $orderID
      * @return mixed
      */
-    public static function cancel($orderID)
+    public static function cancel($orderID, $comment)
     {
-        return AloPeykApiHandler::cancelOrder($orderID);
+        return AloPeykApiHandler::cancelOrder($orderID, $comment);
     }
 
     /**

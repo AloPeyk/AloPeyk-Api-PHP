@@ -209,7 +209,7 @@ class AloPeykApiHandler
             throw new AloPeykApiException('OrderID must be integer!');
         }
 
-        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}?columns=*,addresses,screenshot,progress,courier,customer,last_position_minimal,eta_minimal"));
+        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}?columns=*,addresses,screenshot,progress,courier_info,next_address_any,customer,last_position_minimal,eta_minimal"));
 
         return self::getApiResponse($curl);
     }

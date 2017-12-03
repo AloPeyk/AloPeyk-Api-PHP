@@ -332,4 +332,13 @@ class AloPeykApiHandler
 
         return self::getApiResponse($curl);
     }
+
+    /**
+     * Retrieve the full path of the uploaded signature
+     * @return string
+     */
+    public static function getSignaturePath($relativePath)
+    {
+        return Configs::URL . $relativePath;
+    }
 }

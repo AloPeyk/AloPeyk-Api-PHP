@@ -234,6 +234,26 @@ class AloPeykApiHandler
     }
 
     /**
+     * @param $orderID
+     * @param  $params parameters of comment and rate which are passed inside the $params array
+     * @return mixed
+     * @throws AloPeykApiException
+     */
+    public static function finishOrder($orderID, $params)
+    {
+        $curl = curl_init();
+
+        $orderID = AloPeykValidator::sanitize($orderID);
+        if (!filter_var($orderID, FILTER_VALIDATE_INT)) {
+            throw new AloPeykApiException('OrderID must be integer!');
+        }
+
+        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/finish", "POST", $params));
+
+        return self::getApiResponse($curl);
+    }
+
+    /**
      * User Profile
      * @return  mixed
      */

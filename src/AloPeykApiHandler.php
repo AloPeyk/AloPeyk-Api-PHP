@@ -209,7 +209,7 @@ class AloPeykApiHandler
             throw new AloPeykApiException('OrderID must be integer!');
         }
 
-        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}?columns=*,addresses,screenshot,progress,courier,customer,last_position_minimal,eta_minimal"));
+        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}?columns=*,addresses,screenshot,progress,courier_info,next_address_any,customer,last_position_minimal,eta_minimal"));
 
         return self::getApiResponse($curl);
     }
@@ -229,6 +229,26 @@ class AloPeykApiHandler
         }
 
         curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/cancel?comment={$comment}"));
+
+        return self::getApiResponse($curl);
+    }
+
+    /**
+     * @param $orderID
+     * @param  $params parameters of comment and rate which are passed inside the $params array
+     * @return mixed
+     * @throws AloPeykApiException
+     */
+    public static function finishOrder($orderID, $params)
+    {
+        $curl = curl_init();
+
+        $orderID = AloPeykValidator::sanitize($orderID);
+        if (!filter_var($orderID, FILTER_VALIDATE_INT)) {
+            throw new AloPeykApiException('OrderID must be integer!');
+        }
+
+        curl_setopt_array($curl, self::getCurlOptions("orders/{$orderID}/finish", "POST", $params));
 
         return self::getApiResponse($curl);
     }
@@ -311,5 +331,14 @@ class AloPeykApiHandler
         curl_setopt_array($curl, self::getCurlOptions("config"));
 
         return self::getApiResponse($curl);
+    }
+
+    /**
+     * Retrieve the full path of the uploaded signature
+     * @return string
+     */
+    public static function getSignaturePath($relativePath)
+    {
+        return Configs::URL . $relativePath;
     }
 }

@@ -207,6 +207,15 @@ class Order
      * @param $orderID
      * @return mixed
      */
+    public static function finish($orderID, $params)
+    {
+        return AloPeykApiHandler::finishOrder($orderID, $params);
+    }
+
+    /**
+     * @param $orderID
+     * @return mixed
+     */
     public static function getDetails($orderID)
     {
         return AloPeykApiHandler::getOrderDetail($orderID);

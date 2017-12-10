@@ -116,12 +116,13 @@ class AloPeykApiHandler
 
     /**
      * Authentication
+     * @param  $withConfig
      */
-    public static function authenticate()
+    public static function authenticate($withConfig = false)
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl, self::getCurlOptions());
+        curl_setopt_array($curl, self::getCurlOptions("?withconfig={$withConfig}"));
 
         return self::getApiResponse($curl);
     }

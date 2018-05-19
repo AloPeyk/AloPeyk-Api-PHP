@@ -59,10 +59,6 @@ class Address
     public function setCity($city)
     {
         $city = AloPeykValidator::sanitize($city);
-        if (!in_array($city, array_values(Configs::CITIES))) {
-            throw new AloPeykApiException('This city is not supported yet');
-        }
-
         $this->city = $city;
     }
 

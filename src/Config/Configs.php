@@ -34,9 +34,26 @@ class Configs
         'destination',
     ];
     const TRANSPORT_TYPES = [
-        'motorbike',
-        'motor_taxi',
-        'cargo',
+        'motorbike' => [
+            'label' => 'Motorbike',
+            'delivery' => true
+        ],
+        'motor_taxi' => [
+            'label' => 'Cart Bike',
+            'delivery' => false
+        ],
+        'cargo' => [
+            'label' => 'Cargo',
+            'delivery' => true
+        ],
+        'cargo_s' => [
+            'label' => 'Small Cargo',
+            'delivery' => true
+        ],
+        'car' => [
+            'label' => 'Car',
+            'delivery' => true
+        ],
     ];
     const CITIES = [
         'tehran',

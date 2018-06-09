@@ -290,6 +290,15 @@ class AloPeykApiHandler
     }
 
     /**
+     * Transport Type List
+     * @return array
+     */
+    public static function getTransportTypes()
+    {
+        return Configs::TRANSPORT_TYPES;
+    }
+
+    /**
      * Credit Top-Up
      * @param $user_id
      * @param $amount

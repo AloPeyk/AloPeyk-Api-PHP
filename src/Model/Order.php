@@ -50,7 +50,7 @@ class Order
     public function setTransportType($transportType)
     {
         $transportType = AloPeykValidator::sanitize($transportType);
-        if (!in_array($transportType, array_values(Configs::TRANSPORT_TYPES))) {
+        if (!in_array($transportType, array_keys(Configs::TRANSPORT_TYPES))) {
             throw new AloPeykApiException('Transport Type is not correct');
         }
 
@@ -259,7 +259,7 @@ class Order
         }
 
         // CHECK TRANSPORT_TYPE
-        if (!in_array($this->getTransportType(), array_values(Configs::TRANSPORT_TYPES))) {
+        if (!in_array($this->getTransportType(), array_keys(Configs::TRANSPORT_TYPES))) {
             throw new AloPeykApiException('Transport Type is not correct!');
         }
 

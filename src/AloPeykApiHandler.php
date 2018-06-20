@@ -165,7 +165,9 @@ class AloPeykApiHandler
             throw new AloPeykApiException('Location Name can not be empty!');
         }
 
-        curl_setopt_array($curl, self::getCurlOptions("locations?input=$locationName"));
+        $name = urlencode($locationName);
+
+        curl_setopt_array($curl, self::getCurlOptions("locations?input={$name}"));
 
         return self::getApiResponse($curl);
     }

@@ -20,9 +20,9 @@ class Location
      * @param $locationName
      * @return mixed
      */
-    public static function getSuggestions($locationName)
+    public static function getSuggestions($locationName, $latlng)
     {
-        return AloPeykApiHandler::getLocationSuggestion($locationName);
+        return AloPeykApiHandler::getLocationSuggestion($locationName, $latlng);
     }
 
 }

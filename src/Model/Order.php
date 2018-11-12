@@ -18,8 +18,9 @@ class Order
     private $hasReturn;
     private $cashed;
     private $scheduled_at;
+    private $discount_coupon;
 
-    public function __construct($transportType, $originAddress, $destinationsAddress, $scheduled_at = null)
+    public function __construct($transportType, $originAddress, $destinationsAddress, $scheduled_at = null, $discount_coupon=null)
     {
         $this->setTransportType($transportType);
         $this->addOriginAddress($originAddress);
@@ -29,6 +30,11 @@ class Order
         if($scheduled_at)
         {
             $this->setScheduledAt($scheduled_at);
+        }
+
+        if($discount_coupon)
+        {
+            $this->setDiscountCoupon($discount_coupon);
         }
 
         $this->destinationsAddress = [];
@@ -64,6 +70,15 @@ class Order
     public function setScheduledAt($scheduled_at)
     {
         $this->scheduled_at = $scheduled_at;
+    }
+
+    /**
+     * Set discount_coupon attribute
+     * @param $discountCoupon
+     */
+    public function setDiscountCoupon($discount_coupon)
+    {
+        $this->discount_coupon = $discount_coupon;
     }
 
     /**
@@ -194,6 +209,11 @@ class Order
         return $this->scheduled_at;
     }
 
+    public function getDiscountCoupon()
+    {
+        return $this->discount_coupon;
+    }
+
     /**
      * @param $orderID
      * @return mixed
@@ -236,7 +256,8 @@ class Order
             'transport_type' => $this->getTransportType(),
             'has_return' => $this->getHasReturn(),
             'cashed' => $this->getCashed(),
-            'scheduled_at' => $this->getScheduledAt()
+            'scheduled_at' => $this->getScheduledAt(),
+            'discount_coupon' => $this->getDiscountCoupon()
         ];
 
         $orderArray['addresses'] = array_merge(

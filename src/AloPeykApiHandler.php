@@ -9,6 +9,8 @@ use AloPeyk\Validator\AloPeykValidator;
 class AloPeykApiHandler
 {
     private static $localToken;
+    private static $env;
+    private static $endpoint;
 
     /**
      * @param $name
@@ -50,14 +52,14 @@ class AloPeykApiHandler
             Put it in: vendor/alopeyk/alopeyk-api-php/src/Config/Configs.php : TOKEN const 
             ');
         }
+        $endpoint = self::getEndpoint();
         $curlOptions = [
-            CURLOPT_URL => Configs::API_URL . $endPoint,
+            CURLOPT_URL => $endpoint['api_url'] . $endPoint,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_FAILONERROR => true,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $accessToken,
                 'Content-Type: application/json; charset=utf-8',
@@ -86,7 +88,28 @@ class AloPeykApiHandler
         if ($err) {
             throw new AloPeykApiException($err);
         } else {
-            return json_decode($response);
+            $response = json_decode($response);
+            if ( $response && $response->status == 'fail' ) {
+                $err_msg = '';
+                if ( isset( $response->message ) ) {
+                    $err_msg = $response->message;
+                } elseif ( isset( $response->object ) ) {
+                    if ( isset( $response->object->error_msg ) ) {
+                        $err_msg = $response->object->error_msg;
+                    } elseif ( isset( $response->object->message ) ) {
+                        $err_msg = $response->object->message;
+                        $error_json = json_decode( $err_msg );
+                        if ( json_last_error() == JSON_ERROR_NONE ) {
+                            foreach ( $error_json as $value ) {
+                                $err_msg = $value[0];
+                                break;
+                            }
+                        }
+                    }
+                }
+                $response->message = $err_msg;
+            }
+            return $response;
         }
     }
 
@@ -110,6 +133,44 @@ class AloPeykApiHandler
         return $accessToken;
     }
 
+    /**
+     * @param $env
+     * @param $endpoint
+     */
+    public static function setEndpoint($env = 'production', $endpoint = null)
+    {
+        self::$env = $env;
+        $endpoints = Configs::ENDPOINTS;
+        if ($env == 'production') {
+            $endpoint = $endpoints['production'];
+        } elseif ($env == 'sandbox') {
+            $endpoint = $endpoints['sandbox'];
+        } elseif ($env == 'custom') {
+            if (!is_array($endpoint) || !isset($endpoint['url']) || !isset($endpoint['api_url']) || !isset($endpoint['tracking_url'])) {
+                throw new AloPeykApiException('Endpoint is not correct');
+            }
+        } else {
+            $endpoint['url']          = str_replace('***', $env, $endpoints['custom']['url']);
+            $endpoint['api_url']      = str_replace('***', $env, $endpoints['custom']['api_url']);
+            $endpoint['tracking_url'] = str_replace('***', $env, $endpoints['custom']['tracking_url']);
+        }
+        self::$endpoint = $endpoint;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEndpoint($endpoint = null)
+    {
+        $endpoints = Configs::ENDPOINTS;
+        if (is_null($endpoint)) {
+            $endpoint = empty(self::$endpoint) ? $endpoints['production'] : self::$endpoint;
+        } else {
+            $endpoint = $endpoints[$endpoint];
+        }
+        return $endpoint;
+    }
+
     /** ----------------------------------------------------------------------------------------------------------------
      * public functions
      * ---------------------------------------------------------------------------------------------------------------- */
@@ -118,11 +179,14 @@ class AloPeykApiHandler
      * Authentication
      * @param  $withConfig
      */
-    public static function authenticate($withConfig = false)
+    public static function authenticate($withConfig = false, $with = false)
     {
         $curl = curl_init();
-
-        curl_setopt_array($curl, self::getCurlOptions("?withconfig={$withConfig}"));
+        $config = "?withconfig={$withConfig}";
+        if ( $with && is_array($with) ) {
+            $config = $config . '&' . http_build_query( $with );
+        }
+        curl_setopt_array($curl, self::getCurlOptions($config));
 
         return self::getApiResponse($curl);
     }
@@ -144,8 +208,7 @@ class AloPeykApiHandler
         if (!AloPeykValidator::validateLongitude($longitude)) {
             throw new AloPeykApiException('Longitude is not correct');
         }
-
-
+        
         curl_setopt_array($curl, self::getCurlOptions("locations?latlng=$latitude,$longitude"));
 
         return self::getApiResponse($curl);
@@ -308,7 +371,8 @@ class AloPeykApiHandler
      */
     public static function getPaymentRoute($user_id, $amount, $gateway = 'saman')
     {
-        return Configs::API_URL . Configs::PAYMENT_ROUTES[$gateway] . "?user_id={$user_id}&amount={$amount}";
+        $endpoint = self::getEndpoint();
+        return $endpoint['api_url'] . Configs::PAYMENT_ROUTES[$gateway] . "?user_id={$user_id}&amount={$amount}";
     }
 
     /**
@@ -318,7 +382,8 @@ class AloPeykApiHandler
      */
     public static function getTrackingUrl($orderToken)
     {
-        return Configs::TRACKING_URL . "#/{$orderToken}";
+        $endpoint = self::getEndpoint();
+        return $endpoint['tracking_url'] . "#/{$orderToken}";
     }
 
     /**
@@ -329,7 +394,8 @@ class AloPeykApiHandler
      */
     public static function getPrintInvoice($orderId, $orderToken)
     {
-        return Configs::URL . "order/{$orderId}/print?token={$orderToken}";
+        $endpoint = self::getEndpoint();
+        return $endpoint['url'] . "order/{$orderId}/print?token={$orderToken}";
     }
 
     /**
@@ -351,6 +417,18 @@ class AloPeykApiHandler
      */
     public static function getSignaturePath($relativePath)
     {
-        return Configs::URL . $relativePath;
+        $endpoint = self::getEndpoint();
+        return $endpoint['url'] . $relativePath;
+    }
+
+    /**
+     * Return list of customers loyalty products OR Submit customer loyalty product buy request
+     * @return  mixed
+     */
+    public static function CustomerLoyaltyProducts($productId = '', $method = 'GET')
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, self::getCurlOptions('loyalty/customer/products/' . $productId, $method));
+        return self::getApiResponse($curl);
     }
 }

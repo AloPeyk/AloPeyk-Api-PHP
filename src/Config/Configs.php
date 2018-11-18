@@ -22,9 +22,23 @@ class Configs
     | Don't edit following values
     |
     */
-    const URL = 'https://api.alopeyk.com/';
-    const API_URL = 'https://api.alopeyk.com/api/v2/';
-    const TRACKING_URL = 'https://tracking.alopeyk.com/';
+    const ENDPOINTS = [
+        'sandbox'    => [
+            'url'          => 'https://sandbox-api.alopeyk.com/',
+            'api_url'      => 'https://sandbox-api.alopeyk.com/api/v2/',
+            'tracking_url' => 'https://sandbox-tracking.alopeyk.com/',
+        ],
+        'production' => [
+            'url'          => 'https://api.alopeyk.com/',
+            'api_url'      => 'https://api.alopeyk.com/api/v2/',
+            'tracking_url' => 'https://tracking.alopeyk.com/',
+        ],
+        'custom'     => [
+            'url'          => 'https://api-***.alopeyk.com/',
+            'api_url'      => 'https://api-***.alopeyk.com/api/v2/',
+            'tracking_url' => 'https://tracking-***.alopeyk.com/',
+        ],
+    ];
     const PAYMENT_ROUTES = [
         'saman' => 'payments/saman/checkout',
         'zarinpal' => 'payments/zarinpal/checkout'

@@ -175,17 +175,17 @@ use AloPeyk\Model\Order;
 /*
  * Create Origin Address
  */
-$origin = new Address('origin', 'tehran', '35.723711', '51.410547');
+$origin = new Address('origin', '35.723711', '51.410547');
 
 /*
  * Create First Destination
  */
-$firstDest = new Address('destination', 'tehran', '35.728457', '51.436969');
+$firstDest = new Address('destination', '35.728457', '51.436969');
 
 /*
  * Create Second Destination
  */
-$secondDest = new Address('destination', 'tehran', '35.729379', '51.418151');
+$secondDest = new Address('destination', '35.729379', '51.418151');
 
 /*
  * Create New Order
@@ -300,8 +300,7 @@ use AloPeyk\Model\Order;
 /*
  * Create Origin: Behjat Abad
  */
-$origin = new Address('origin', 'tehran', '35.755460', '51.416874');
-$origin->setAddress("... Behjat Abad, Tehran");
+$origin = new Address('origin', '35.755460', '51.416874');
 $origin->setDescription("Behjat Abad");                                            // optional                            
 $origin->setUnit("44");                                                            // optional
 $origin->setNumber("1");                                                           // optional
@@ -311,8 +310,7 @@ $origin->setPersonPhone("09370000000");                                         
 /*
  * Create First Destination: N Sohrevardi Ave
  */
-$firstDest = new Address('destination', 'tehran', '35.758495', '51.442550');
-$firstDest->setAddress("... N Sohrevardi Ave, Tehran");
+$firstDest = new Address('destination', '35.758495', '51.442550');
 $firstDest->setDescription("N Sohrevardi Ave");                                    // optional
 $firstDest->setUnit("55");                                                         // optional
 $firstDest->setNumber("2");                                                        // optional
@@ -323,8 +321,7 @@ $firstDest->setPersonPhone("09380000000");                                      
 /*
  * Create Second Destination: Ahmad Qasir Bokharest St
  */
-$secondDest = new Address('destination', 'tehran', '35.895452', '51.589632');
-$secondDest->setAddress("... Ahmad Qasir Bokharest St, Tehran");
+$secondDest = new Address('destination', '35.895452', '51.589632');
 $secondDest->setDescription("Ahmad Qasir Bokharest St");                            // optional
 $secondDest->setUnit("66");                                                         // optional
 $secondDest->setNumber("3");                                                        // optional

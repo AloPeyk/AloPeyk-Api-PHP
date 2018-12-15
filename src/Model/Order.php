@@ -12,7 +12,6 @@ class Order
     // Attributes ------------------------------------------------------------------------------------------------------
 
     private $transportType;
-    private $city;
     private $originAddress;
     private $destinationsAddress;
     private $hasReturn;
@@ -96,7 +95,6 @@ class Order
         }
 
         $this->originAddress = $originAddress;
-        $this->city = $originAddress->getCity();
     }
 
     /**
@@ -252,7 +250,6 @@ class Order
         $this->isValid();
 
         $orderArray = [
-            'city' => $this->city,
             'transport_type' => $this->getTransportType(),
             'has_return' => $this->getHasReturn(),
             'cashed' => $this->getCashed(),
@@ -274,10 +271,6 @@ class Order
      */
     private function isValid()
     {
-        // CHECK CITY
-        if (AloPeykValidator::sanitize($this->city) != $this->getOriginAddress()->getCity()) {
-            throw new AloPeykApiException('Origin Address is not valid!');
-        }
 
         // CHECK TRANSPORT_TYPE
         if (!in_array($this->getTransportType(), array_keys(Configs::TRANSPORT_TYPES))) {

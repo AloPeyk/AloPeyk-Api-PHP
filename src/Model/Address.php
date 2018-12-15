@@ -11,10 +11,8 @@ class Address
     // Attributes ------------------------------------------------------------------------------------------------------
 
     private $type;
-    private $city;
     private $latitude;
     private $longitude;
-    private $address;
     private $description;       //some description for origin'
     private $unit;              //unit of origin address
     private $number;            //number of origin address
@@ -24,14 +22,12 @@ class Address
     /**
      * Address constructor.
      * @param $type
-     * @param $city
      * @param $latitude
      * @param $longitude
      */
-    public function __construct($type, $city, $latitude, $longitude)
+    public function __construct($type, $latitude, $longitude)
     {
         $this->setType($type);
-        $this->setCity($city);
         $this->setLatitude($latitude);
         $this->setLongitude($longitude);
     }
@@ -50,16 +46,6 @@ class Address
         }
 
         $this->type = $type;
-    }
-
-    /**
-     * @param $city
-     * @throws AloPeykApiException
-     */
-    public function setCity($city)
-    {
-        $city = AloPeykValidator::sanitize($city);
-        $this->city = $city;
     }
 
     /**
@@ -86,14 +72,6 @@ class Address
         }
 
         $this->longitude = $longitude;
-    }
-
-    /**
-     * @param mixed $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = AloPeykValidator::sanitize($address);
     }
 
     /**
@@ -149,14 +127,6 @@ class Address
     /**
      * @return mixed
      */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getLatitude()
     {
         return $this->latitude;
@@ -168,14 +138,6 @@ class Address
     public function getLongitude()
     {
         return $this->longitude;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAddress()
-    {
-        return $this->address;
     }
 
     /**
@@ -235,10 +197,8 @@ class Address
 
         return [
             'type' => $this->getType(),
-            'city' => $this->getCity(),
             'lat' => $this->getLatitude(),
             'lng' => $this->getLongitude(),
-            'address' => $this->getAddress(),
             'description' => $this->getDescription(),
             'unit' => $this->getUnit(),
             'number' => $this->getNumber(),
@@ -255,14 +215,8 @@ class Address
     private function isValid($endPoint)
     {
         if ($endPoint == "getPrice") {
-            if (!$this->getType() || !$this->getCity() || !$this->getLongitude() || !$this->getLatitude()) {
-                throw new AloPeykApiException('Fill Out This Attributes in all destinations: type , city , latitude , longitude');
-            }
-        }
-
-        if ($endPoint == "createOrder") {
-            if (!$this->getAddress()) {
-                throw new AloPeykApiException('Fill Out This Attributes in all destinations: type , city , latitude , longitude , address');
+            if (!$this->getType() || !$this->getLongitude() || !$this->getLatitude()) {
+                throw new AloPeykApiException('Fill Out This Attributes in all destinations: type , latitude , longitude');
             }
         }
 

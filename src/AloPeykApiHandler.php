@@ -249,6 +249,22 @@ class AloPeykApiHandler
     }
 
     /**
+     * @param $orders array of orders
+     * @return mixed
+     */
+    public static function getBatchPrice($orders)
+    {
+        $curl = curl_init();
+        foreach ($orders as $key => $order) {
+            $orders[$key] = $order->toArray('getPrice');
+        }
+
+        curl_setopt_array($curl, self::getCurlOptions('orders/batch-price', 'POST', $orders));
+
+        return self::getApiResponse($curl);
+    }
+
+    /**
      * @param $order
      * @return mixed
      */

@@ -721,6 +721,38 @@ var_dump($apiResponse);
 ```
 
 
+#### 8. Get Batch Price
+This endpoint is the same as Normal Price But the difference is you can calculate up to 15 pairs of Normal Price in one request.
+
+```PHP
+use AloPeyk\Model\Address;
+use AloPeyk\Model\Order;
+
+/*
+ * Create Origin Address
+ */
+$origin = new Address('origin', '35.723711', '51.410547');
+
+/*
+ * Create First Destination
+ */
+$firstDest = new Address('destination', '35.728457', '51.436969');
+
+/*
+ * Create Second Destination
+ */
+$secondDest = new Address('destination', '35.729379', '51.418151');
+
+/*
+ * Create New Order
+ */
+$orders[] = new Order('motor_taxi', $origin, [$firstDest, $secondDest]);
+$orders[] = new Order('car', $origin, [$firstDest, $secondDest]);
+$orders[] = new Order('cargo_s', $origin, [$firstDest, $secondDest]);
+$orders[] = new Order('cargo', $origin, [$firstDest, $secondDest]);
+
+$apiResponse = AloPeykApiHandler::getBatchPrice($orders);
+```
 
 
 ## License

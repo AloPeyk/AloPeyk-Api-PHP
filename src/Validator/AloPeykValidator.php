@@ -46,7 +46,7 @@ class AloPeykValidator
      */
     public static function sanitize($string)
     {
-        return strtolower(trim(filter_var($string, FILTER_SANITIZE_STRING)));
+        return strtolower(trim(htmlspecialchars(strip_tags($string))));
     }
 
 }

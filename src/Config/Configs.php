@@ -24,9 +24,9 @@ class Configs
     */
     const ENDPOINTS = [
         'sandbox'    => [
-            'url'          => 'https://sandbox-api.alopeyk.com/',
-            'api_url'      => 'https://sandbox-api.alopeyk.com/api/v2/',
-            'tracking_url' => 'https://sandbox-tracking.alopeyk.com/',
+            'url'          => 'https://api-stg.alo-dev.com/',
+            'api_url'      => 'https://api-stg.alo-dev.com/api/v2/',
+            'tracking_url' => 'https://tracking-stg.alo-dev.com/',
         ],
         'production' => [
             'url'          => 'https://api.alopeyk.com/',

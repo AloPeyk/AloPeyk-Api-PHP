@@ -18,6 +18,7 @@ class Order
     private $cashed;
     private $scheduled_at;
     private $discount_coupon;
+    private $platform = 'api_php_package';
 
     public function __construct($transportType, $originAddress, $destinationsAddress, $scheduled_at = null, $discount_coupon=null)
     {
@@ -239,6 +240,14 @@ class Order
         return AloPeykApiHandler::getOrderDetail($orderID);
     }
 
+    public function getPlatform() {
+        return $this->platform;
+    }
+
+    public function setPlatform( $platform ) {
+        $this->platform = $platform;
+    }
+
     // Utilities -------------------------------------------------------------------------------------------------------
 
     /**
@@ -254,7 +263,8 @@ class Order
             'has_return' => $this->getHasReturn(),
             'cashed' => $this->getCashed(),
             'scheduled_at' => $this->getScheduledAt(),
-            'discount_coupon' => $this->getDiscountCoupon()
+            'discount_coupon' => $this->getDiscountCoupon(),
+            'platform' => $this->getPlatform()
         ];
 
         $orderArray['addresses'] = array_merge(
@@ -297,5 +307,4 @@ class Order
 
         return true;
     }
-
 }
